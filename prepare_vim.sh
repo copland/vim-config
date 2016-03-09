@@ -22,6 +22,9 @@ git submodule add https://github.com/alfredodeza/pytest.vim.git bundle/py.test
 # Golang plugins
 git submodule add https://github.com/fatih/vim-go.git bundle/vim-go
 
+# Yaml plugins
+git submodule add https://github.com/chase/vim-ansible-yaml.git bundle/vim-yaml
+
 git submodule init
 git submodule update
 git submodule foreach git submodule init
