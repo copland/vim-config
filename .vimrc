@@ -1,6 +1,8 @@
 set nocompatible " be iMproved, requred
 filetype off     " required
 
+set number
+
 execute pathogen#infect()
 execute pathogen#helptags()
 
@@ -14,27 +16,27 @@ map <c-k> <c-w>k
 map <c-l> <c-w>l
 map <c-h> <c-w>h
 
-" Fix mapping issue with TaskList plugin
-map <leader>td <Plug>TaskList
-
-" Configure mapping for gundo
-map <leader>g :GundoToggle<CR>
-
-" Enable syntax highlighting and pyflakes
+" Enable syntax highlighting
 syntax on                   " syntax highlighting
 filetype on                 " try to detect filetypes
 filetype plugin indent on   " enable loading indent file for filetype
 
-let g:pyflakes_use_quickfix = 0
+set background=dark
+colorscheme solarized
 
-let g:pep8_map='<leader>8'  " jump to pep8 violations with mapping
+" Highlight trailing whitespace
+highlight ErrorMsg ctermbg=red guibg=red ctermfg=black guifg=black
+match ErrorMsg '\s\+$'
 
-" Configure SuperTab to be context sensitive and enable omni code completion
-au FileType python set omnifunc=pythoncomplete#Complete
-let g:SuperTabDefaultCompletionType = "context"
+function! TrimWhiteSpace()
+    %s/\s\+$//e
+endfunction
 
-" Mapping for easy access to Ack (quick fuzzy text search)
-nmap <leader>a <Esc>:Ack!
+autocmd FileType python,java autocmd FileWritePre    * :call TrimWhiteSpace()
+autocmd FileType python,java autocmd FileAppendPre   * :call TrimWhiteSpace()
+autocmd FileType python,java autocmd FilterWritePre  * :call TrimWhiteSpace()
+autocmd FileType python,java autocmd BufWritePre     * :call TrimWhiteSpace()
+
 
 " Make vim aware of virtualenv
 py << EOF
@@ -78,17 +80,6 @@ set statusline+=%*
 
 set statusline+=%{fugitive#statusline()}
 
-"display a warning if &et is wrong, or we have mixed-indenting
-"set statusline+=%#error#
-"set statusline+=%{StatuslineTabWarning()}
-"set statusline+=%*
-
-"set statusline+=%{StatuslineTrailingSpaceWarning()}
-"set statusline+=%{StatuslineLongLineWarning()}
-
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
 
 "display a warning if &paste is set
 set statusline+=%#error#
@@ -120,8 +111,6 @@ let g:go_highlight_build_constraints = 1
 let g:go_fmt_command = "goimports"
 let g:go_fmt_fail_silently = 1
 let g:go_fmt_autosave = 0
-
-set number
 
 " automatically open NERDTree when vim starts
 autocmd vimenter * NERDTree
