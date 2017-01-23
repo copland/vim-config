@@ -5,11 +5,12 @@ ACTION=$1
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BUNDLE_DIR=$DIR/bundle
 
+# If reinstalling we should delete the existing plguins
 if [[ "$ACTION" == "reinstall" ]]; then
 	rm -rf $BUNDLE_DIR/*
 fi
 
-# Cleanup old bundles to make sure we are only getting what we want
+# Make the bundle/ dir if it does not exist
 if [ ! -d $BUNDLE_DIR ]; then
     mkdir -p $BUNDLE_DIR
 fi
@@ -17,6 +18,7 @@ fi
 function install_plugin() {
     local repo=$1
     local loc=$2
+    # If the location already exists, don't do anything
     if [ ! -d $loc ]; then
         cloned_dir=$(echo "$repo" | cut -d'/' -f5 | cut -d'.' -f1)
         git clone $repo $cloned_dir
