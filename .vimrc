@@ -21,8 +21,7 @@ syntax on                   " syntax highlighting
 filetype on                 " try to detect filetypes
 filetype plugin indent on   " enable loading indent file for filetype
 
-set background=dark
-colorscheme solarized
+colorscheme molokai
 
 " Highlight trailing whitespace
 highlight ErrorMsg ctermbg=red guibg=red ctermfg=black guifg=black

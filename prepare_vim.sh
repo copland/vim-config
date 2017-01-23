@@ -1,24 +1,30 @@
 #!/bin/bash
 
+ACTION=$1
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BUNDLE_DIR=$DIR/bundle
 
-# Cleanup old bundles to make sure we are only getting what we want
-if [[ -d $BUNDLE_DIR ]]; then
+if [[ "$ACTION" == "reinstall" ]]; then
 	rm -rf $BUNDLE_DIR/*
-else
-	mkdir -p $BUNDLE_DIR
+fi
+
+# Cleanup old bundles to make sure we are only getting what we want
+if [ ! -d $BUNDLE_DIR ]; then
+    mkdir -p $BUNDLE_DIR
 fi
 
 function install_plugin() {
     local repo=$1
     local loc=$2
-    cloned_dir=$(echo "$repo" | cut -d'/' -f5 | cut -d'.' -f1)
-    git clone $repo $cloned_dir
-    mv $cloned_dir $loc
+    if [ ! -d $loc ]; then
+        cloned_dir=$(echo "$repo" | cut -d'/' -f5 | cut -d'.' -f1)
+        git clone $repo $cloned_dir
+        mv $cloned_dir $loc
+    fi
 }
 
-
+echo "Installing plugins..."
 # Generally useful plugins
 install_plugin http://github.com/tpope/vim-fugitive.git $BUNDLE_DIR/fugitive
 install_plugin http://github.com/msanders/snipmate.vim.git $BUNDLE_DIR/snipmate
@@ -47,4 +53,6 @@ install_plugin https://github.com/chase/vim-ansible-yaml.git $BUNDLE_DIR/vim-yam
 # Color schemes
 install_plugin https://github.com/altercation/vim-colors-solarized.git $BUNDLE_DIR/vim-colors-solarized
 
+echo "Copying $DIR/.vimrc to ~/.vimrc..."
 cp ./.vimrc ~/.vimrc
+echo "Done."
